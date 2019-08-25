@@ -17,7 +17,7 @@ namespace NewsPortal3.Config
         private static string Name => "My Cool API";
         private static string Version => "v1";
         private static string Endpoint => $"/swagger/{Version}/swagger.json";
-        private static string UIEndpoint => "";
+        private static string UIEndpoint => "swagger";
 
         public static void SwaggerUIConfig(SwaggerUIOptions config)
         {

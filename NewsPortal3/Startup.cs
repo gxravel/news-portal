@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.IIS;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -99,6 +100,10 @@ namespace NewsPortal3
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<INewsService, NewsService>();
 
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "wwwroot/ClientApp/build";
+            });
             services.AddSwaggerGen(SwaggerConfig.SwaggerGenConfig);
 
             services.Configure<ApiBehaviorOptions>(options =>
@@ -171,8 +176,16 @@ namespace NewsPortal3
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "wwwroot/ClientApp";
 
-
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+                }
+            });
         }
     }
 }
